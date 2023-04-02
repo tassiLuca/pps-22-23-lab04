@@ -10,11 +10,34 @@ import scala.util.Random.nextInt
 
 trait Grid:
 
-  def cellAt(position: Position): Option[(Cell, Int)]
+  /**
+   * Get the cell at the given position.
+   * @param position the position of the cell.
+   * @return an [[Option]] with the requested cell or an empty
+   *         one if no cell exists at the given position.
+   */
+  def cellAt(position: Position): Option[Cell]
 
-  def adjacentCellsTo(cell: Cell): Stream[(Cell, Int)]
+  /**
+   * Get the adjacent cells to the given one.
+   * @param cell the cell for which find the neighbors.
+   * @return a [[Stream]] containing the neighbors of the given cell.
+   */
+  def adjacentCellsTo(cell: Cell): Stream[Cell]
 
+  /**
+   * Get all the cell composing the grid.
+   * @return a [[Stream]] of all the cells.
+   */
   def cells: Stream[Cell]
+
+  /**
+   * Get the number of mines adjacent to the given position.
+   * @param position the position for which find the neighbor mines.
+   * @return an [[Option]] with the requested number or an empty if
+   *         no cell exists at the given position.
+   */
+  def adjacentMinesTo(position: Position): Option[Int]
 
 object Grid:
 
@@ -39,8 +62,11 @@ object Grid:
     private val cellsWithMinesCount: Stream[(Cell, Int)] =
       map(cells)(c => (c, size(filter(cells)(c1 => c1.isAdjacentTo(c) && c1.hasMine))))
 
-    override def adjacentCellsTo(cell: Cell): Stream[(Cell, Int)] =
-      filter(cellsWithMinesCount)((c, _) => c.isAdjacentTo(cell))
+    override def adjacentCellsTo(cell: Cell): Stream[Cell] =
+      filter(cells)(_.isAdjacentTo(cell))
 
-    override def cellAt(position: Position): Option[(Cell, Int)] =
-      List.find(toList(cellsWithMinesCount))((c, _) => c.position == position)
+    override def cellAt(position: Position): Option[Cell] =
+      List.find(toList(cells))(_.position == position)
+
+    override def adjacentMinesTo(position: Position): Option[Int] =
+      Option.flatMap(List.find(toList(cellsWithMinesCount))((c, _) => c.position == position))((_, i) => Option.Some(i))
