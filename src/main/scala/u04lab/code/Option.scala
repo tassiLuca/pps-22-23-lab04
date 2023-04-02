@@ -10,6 +10,8 @@ object Option:
     case None() => true
     case _ => false
 
+  def isPresent[A](opt: Option[A]): Boolean = !isEmpty(opt)
+
   def orElse[A, B >: A](opt: Option[A], orElse: B): B = opt match
     case Some(a) => a
     case _ => orElse

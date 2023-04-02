@@ -3,7 +3,7 @@ package u04lab.code
 import scala.annotation.tailrec
 import u04lab.code.Option.*
 import u04lab.code.Option
-// A generic linkedlist
+// A generic linked-list
 enum List[E]:
   case Cons(head: E, tail: List[E])
   case Nil()
@@ -11,6 +11,8 @@ enum List[E]:
 // a companion object (i.e., module) for List
 object List:
   def empty[E]: List[E] = Nil()
+
+  def of[E](element: E): List[E] = Cons(element, Nil())
 
   def cons[E](h: E, t: List[E]): List[E] = Cons(h, t)
 
@@ -31,6 +33,7 @@ object List:
     case Cons(_, t) => filter(t)(pred)
     case Nil() => Nil()
 
+  @tailrec
   def drop[A](list: List[A], n: Int): List[A] = (n, list) match
     case (0, l) => l
     case (n, List.Cons(_, tail)) => drop(tail, n - 1)
@@ -40,6 +43,7 @@ object List:
     case Cons(head, rest) => Cons(head, append(rest, right))
     case Nil() => right
 
+  @tailrec
   def foldLeft[A, B](list: List[A])(init: B)(f: (B, A) => B): B = list match
     case Nil() => init
     case Cons(h, t) => foldLeft(t)(f(init, h))(f)
@@ -51,9 +55,10 @@ object List:
 
   def length(list: List[_]): Int = List.sum(List.map(list)(_ => 1))
 
+  @tailrec
   def find[A](list: List[A])(f: A => Boolean): Option[A] = list match
-    case Cons(elem, rest) if f(elem) => Some(elem)
-    case Cons(elem, rest) => find(rest)(f)
+    case Cons(elem, _) if f(elem) => Some(elem)
+    case Cons(_, rest) => find(rest)(f)
     case _ => None()
 
   def contains[A](list: List[A], elem: A): Boolean = !Option.isEmpty(find(list)(_ == elem))

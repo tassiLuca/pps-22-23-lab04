@@ -1,51 +1,72 @@
 package u04lab.code
 import List.*
-trait Item {
+trait Item:
   def code: Int
   def name: String
   def tags: List[String]
-}
+
 
 object Item:
-  def apply(code: Int, name: String, tags: List[String] = List.empty): Item = ???
+  def apply(code: Int, name: String, tags: List[String] = List.empty): Item = ItemImpl(code, name, tags)
+
+  private case class ItemImpl(code: Int, name: String, tags: List[String]) extends Item
 
 /**
  * A warehouse is a place where items are stored.
  */
-trait Warehouse {
+trait Warehouse:
+
   /**
    * Stores an item in the warehouse.
    * @param item the item to store
    */
   def store(item: Item): Unit
+
   /**
    * Searches for items with the given tag.
    * @param tag the tag to search for
    * @return the list of items with the given tag
    */
   def searchItems(tag: String): List[Item]
+
   /**
    * Retrieves an item from the warehouse.
    * @param code the code of the item to retrieve
    * @return the item with the given code, if present
    */
   def retrieve(code: Int): Option[Item]
+
   /**
    * Removes an item from the warehouse.
    * @param item the item to remove
    */
   def remove(item: Item): Unit
+
   /**
    * Checks if the warehouse contains an item with the given code.
    * @param itemCode the code of the item to check
    * @return true if the warehouse contains an item with the given code, false otherwise
    */
   def contains(itemCode: Int): Boolean
-}
 
-object Warehouse {
-  def apply(): Warehouse = ???
-}
+object Warehouse:
+  def apply(): Warehouse = WarehouseImpl()
+
+  private class WarehouseImpl extends Warehouse:
+    import List.*
+    import Option.*
+    private val items: List[Item] = Nil()
+
+    override def store(item: Item): Unit = append(items, of(item))
+
+    override def contains(itemCode: Int): Boolean = isPresent(retrieve(itemCode))
+
+    override def retrieve(code: Int): Option[Item] = find(items)(i => i.code == code)
+
+    override def searchItems(tag: String): List[Item] = filter(items)(i => List.contains(i.tags, tag))
+
+    override def remove(item: Item): Unit = List.remove(items)(_ == item)
+end Warehouse
 
 @main def mainWarehouse(): Unit =
   val warehouse = Warehouse()

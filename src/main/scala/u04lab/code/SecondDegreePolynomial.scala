@@ -17,9 +17,9 @@ object SecondDegreePolynomial:
     SecondDegreePolynomialImpl(secondDegree, firstDegree, constant)
 
   private case class SecondDegreePolynomialImpl(
-    override val secondDegree: Double,
-    override val firstDegree: Double,
-    override val constant: Double
+    secondDegree: Double,
+    firstDegree: Double,
+    constant: Double
   ) extends SecondDegreePolynomial :
 
     override def +(polynomial: SecondDegreePolynomial): SecondDegreePolynomial = SecondDegreePolynomial(
