@@ -7,14 +7,33 @@ enum Status:
 
 trait Cell:
 
+  /**
+   * @return the position of this cell.
+   */
   def position: Position
 
+  /**
+   * @return true if this cell has a mine, false otherwise.
+   */
   def hasMine: Boolean
 
+  /**
+   * Checks if the given cell is adjacent to this.
+   * A cell is not adjacent to itself.
+   * @param cell the cell to check against.
+   * @return true if is adjacent, false otherwise.
+   */
   def isAdjacentTo(cell: Cell): Boolean
 
+  /**
+   * @return the [[Status]] of this cell.
+   */
   def status: Status
 
+  /**
+   * Set the current status of this cell to the given one if it is allowed.
+   * @param newStatus the new status of the cell.
+   */
   def status_=(newStatus: Status): Unit
 
 
