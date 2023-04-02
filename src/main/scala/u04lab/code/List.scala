@@ -3,6 +3,9 @@ package u04lab.code
 import scala.annotation.tailrec
 import u04lab.code.Option.*
 import u04lab.code.Option
+import u04lab.code.Stream
+import u04lab.code.Stream.*
+
 // A generic linked-list
 enum List[E]:
   case Cons(head: E, tail: List[E])
@@ -69,4 +72,9 @@ object List:
     case _ => Nil()
 
   def take[A](list: List[A], n: Int): List[A] = reverse(drop(reverse(list), length(list) - n))
+
+  def toStream[A](list: List[A]): Stream[A] = list match
+    case Cons(h, t) => Stream.cons(h, toStream(t))
+    case _ => Stream.empty
+
 end List

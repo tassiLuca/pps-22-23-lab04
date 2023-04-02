@@ -1,4 +1,4 @@
-package u04lab.polyglot;
+package u04lab.polyglot.minesweeper;
 
 public class Pair<X,Y> {
 
