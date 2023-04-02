@@ -53,19 +53,18 @@ object Warehouse:
   def apply(): Warehouse = WarehouseImpl()
 
   private class WarehouseImpl extends Warehouse:
-    import List.*
     import Option.*
-    private val items: List[Item] = Nil()
+    private var items: List[Item] = empty
 
-    override def store(item: Item): Unit = append(items, of(item))
+    override def store(item: Item): Unit = items = append(items, of(item))
 
     override def contains(itemCode: Int): Boolean = isPresent(retrieve(itemCode))
 
-    override def retrieve(code: Int): Option[Item] = find(items)(i => i.code == code)
+    override def retrieve(code: Int): Option[Item] = find(items)(_.code == code)
 
     override def searchItems(tag: String): List[Item] = filter(items)(i => List.contains(i.tags, tag))
 
-    override def remove(item: Item): Unit = List.remove(items)(_ == item)
+    override def remove(item: Item): Unit = items = List.remove(items)(_ == item)
 end Warehouse
 
 @main def mainWarehouse(): Unit =
