@@ -2,7 +2,7 @@ package u04lab.polyglot.minesweeper
 
 import u04lab.polyglot.minesweeper.Pair
 import u04lab.code.Option.*
-import u04lab.code.Stream.{filter, forEach, toList}
+import u04lab.code.Stream.{filter, forEach, size, toList}
 import u04lab.code.List
 import u04lab.polyglot.minesweeper.Status.{Flagged, Hidden, Revealed}
 
@@ -22,7 +22,7 @@ class LogicsImpl(gridSize: Int, numberOfMines: Int) extends Logics:
     case Hidden => cellAt(cellPosition).status = Flagged
     case Flagged => cellAt(cellPosition).status = Hidden
 
-  override def won: Boolean = List.length(toList(filter(grid.cells)(_.status == Hidden))) == numberOfMines
+  override def won: Boolean = size(filter(grid.cells)(_.status != Revealed)) == numberOfMines
 
   override def hit(cellPosition: Pair[Integer, Integer]): Boolean =
     val hitMine = hasMine(cellPosition)
